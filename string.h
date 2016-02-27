@@ -17,6 +17,8 @@ extern "C" {
 		char &operator[] (int place);
 		void operator= (string input);
 		void operator= (const char *input);
+		string operator+ (string input);
+		string operator+ (char *input);
 	private:
 		char *val;
 		int length;

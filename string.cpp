@@ -68,3 +68,17 @@ void string::operator= (const char *input)
 {
 	set (input);
 }
+
+string string::operator+ (string input)
+{
+	string out = val;
+	out.add (input.c_str ());
+	return out;
+}
+
+string string::operator+ (char *input)
+{
+	string out = val;
+	out.add (input);
+	return out;
+}
