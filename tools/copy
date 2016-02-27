@@ -1,0 +1,21 @@
+#!/bin/bash
+
+mkdir -p .hashes
+
+for var in $@
+do
+	file=${var#arch/*/}
+	if [ -f $file ]; then
+		a=`echo | md5sum $file`
+		c=`cat .hashes/$file`
+		if [ "$a" == "$c" ]; then
+			``
+		else
+			cp $var ./$file
+		fi
+	else
+		cp $var ./
+		b=`echo | md5sum $file`
+		echo $b >> .hashes/$file
+	fi
+done
