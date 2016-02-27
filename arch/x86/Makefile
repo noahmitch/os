@@ -5,9 +5,7 @@ ccargs2=-ffreestanding -O2 -Wall -Wextra -fno-exceptions
 linkerargs=-T linker.ld -ffreestanding -O2 -nostdlib -lgcc
 assemblyargs=-O2 -Wall -Wextra
 
-arch=x86
-
-out=kernel.bin
+out=x86_obj.o
 
 SRCS = $(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
@@ -29,16 +27,14 @@ ASSEMOBJS = $(ASSEMBLYOBJECTS:.s=.o)
 	@$(cc) $(ccargs2) -c $< -o $@
 	@echo "CC >> " $<
 
-make:
-	@cd arch; make arch=$(arch)
-	@make compile
-
-compile: $(ASSEMOBJS) $(OBJS) $(OBJS2)
-	@echo "CC" $(shell ls *.o) " >> " $(out)
-	@$(cc) $(linkerargs) *.o -o $(out)
+make: $(ASSEMOBJS) $(OBJS) $(OBJS2)
+	@echo "CC" $(shell ls *.o | grep -v $(out)) " >> " $(out)
+	@$(tool)-ld -r $(shell ls *.o | grep -v $(out)) -o $(out)
+	@cp $(out) ../../
+	@cp *.h ../../
+	@cp linker.ld ../../
 
 clean:
-	@cd arch; make arch=$(arch) clean
 	@rm -f $(out) $(wildcard *.o)
 
 iso:
